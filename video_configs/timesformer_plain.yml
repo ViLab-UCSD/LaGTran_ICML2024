@@ -1,0 +1,54 @@
+seed: 1
+model:
+    feature_extractor:
+        arch: timesformerb_8f
+        pretrained: true
+    classifier:
+        arch: mlpcls
+        nonlinear: relu
+        # norm: 1 # LDAM
+        feat_size: [768, 256] # [feat_dim, bottleneck_dim]
+        n_class: 22 # domainnet
+data:
+    source:
+        loader: VideoLoader
+        data_root: /data/
+        n_workers: 4
+        drop_last: true
+    target:
+        loader: VideoLoader
+        data_root: /data/
+        n_workers: 4
+        drop_last: true
+training:
+    trainer: plain
+    losses:
+        loss_cls:
+            name: cross_entropy
+    iteration: 100004
+    batch_size: 64
+    val_interval: 5000
+    save_interval: 10000
+    print_interval: 2500
+    optimizer:
+        name: sgd
+        momentum: 0.9
+        weight_decay: 0.0005
+        nesterov: true
+    scheduler:
+        init_lr: 0.003
+        name: inv
+        gamma: 0.001
+        power: 0.75
+    # scheduler:
+    #     init_lr: 0.001
+    #     name: multiStepLr
+    #     gamma: 0.1
+    #     milestones: [25000,40000,50000]
+    freeze_encoder: true
+    resume:
+        #model: runs/plain/clipart/ep-200_model.pkl
+        model: 
+        load_cls: false
+        param_only: true
+exp: a2d_noldam

@@ -2,6 +2,8 @@ from .plain import train_plain
 from .feat_plain import train_plain_feat
 from .feat_lagtran import train_lagtran_feat
 from .lagtran import train_lagtran
+from .val import val
+from .eval import eval
 
 def get_trainer(cfg):
     trainer = _get_trainer_instance(cfg['trainer'])

@@ -4,7 +4,7 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-# https://github.com/tarun005/LaViLa/blob/main/lavila/data/video_transforms.py
+# https://github.com/facebookresearch/LaViLa/blob/main/lavila/data/video_transforms.py
 
 import math
 from typing import Sequence
@@ -226,8 +226,8 @@ def val_transform(img_crop_size=224, num_crops=1, clip_length=8, _divide=True):
     
     transforms_list.extend([
         transforms_video.NormalizeVideo(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        # TemporalCrop(frames_per_clip=clip_length, stride=clip_length),
-        # SpatialCrop(crop_size=img_crop_size, num_crops=num_crops),
+        TemporalCrop(frames_per_clip=clip_length, stride=clip_length),
+        SpatialCrop(crop_size=img_crop_size, num_crops=num_crops),
     ])
 
     trans = transforms.Compose(transforms_list)

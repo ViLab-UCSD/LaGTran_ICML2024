@@ -1,5 +1,4 @@
 from .dataloader import FileDataLoader, ImageDataLoader, JsonDataLoader, Ego4dDataLoader, VideoDataLoader
-from .digits import MNISTLoader, SVHNLoader, USPSLoader
 
 
 def get_dataloader(cfg, splits, batch_size):
@@ -16,10 +15,6 @@ def _get_loader_instance(name):
             'JSONDataLoader' : JsonDataLoader,
             'Ego4dLoader'    : Ego4dDataLoader,
             'VideoLoader'    : VideoDataLoader,
-
-            'MNIST': MNISTLoader,
-            'SVHN' : SVHNLoader,
-            'USPS' : USPSLoader
         }[name]
     except:
         raise BaseException('Loader type {} not available'.format(name))

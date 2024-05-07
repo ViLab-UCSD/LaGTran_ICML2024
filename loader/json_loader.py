@@ -2,9 +2,8 @@ import os
 import torch.utils.data as data
 from PIL import Image
 import json
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Callable, Union
 
-# _VALID_DOMAIN = ["usa", "asia"]
 _VALID_SPLIT = ["train", "test"]
 _DEFAULT_STR = "NULL"
 
@@ -39,21 +38,37 @@ def default_loc(imid):
 
 class ImageJSONLoader(data.Dataset):
 
-    def __init__(self, root_dir, json_path, domain, split="train", transform=None, target_transform=None,
-                 loader=default_loader, return_ann=True, return_loc=False, return_meta=False, 
-                 _loc_keys=None, _meta_keys=None):
+    def __init__(
+            self,
+            root_dir: str,
+            json_path: str,
+            domain: Union[str, List[str]],
+            split: str = "train",
+            transform=None,
+            target_transform=None,
+            loader=default_loader,
+            return_ann: bool=True,
+            return_loc: bool=False,
+            return_meta: bool=False,
+            _loc_keys: List[str]=None,
+            _meta_keys: List[str]=None
+    ):
 
         if _loc_keys is not None:
-            assert isinstance(_loc_keys, list), "loc keys has to be a list."
-            assert return_loc
+            if not isinstance(_loc_keys, list):
+                raise ValueError("loc keys has to be a list.")
+            if not return_loc:
+                raise ValueError("return_loc has to be True to use loc keys.")
             _loc_keys += list(default_loc(0).keys())
         else:
             _loc_keys = list(default_loc(0).keys())
         _loc_keys = list(set(_loc_keys))
         
         if _meta_keys is not None:
-            assert isinstance(_meta_keys, list), "meta keys has to be a list."
-            assert return_meta
+            if not isinstance(_meta_keys, list):
+                raise ValueError("meta keys has to be a list.")
+            if not return_meta:
+                raise ValueError("return_meta has to be True to use meta keys.")
             _meta_keys += list(default_meta(0).keys())
         else:
             _meta_keys = list(default_meta(0).keys())
@@ -64,8 +79,8 @@ class ImageJSONLoader(data.Dataset):
         if not isinstance(split, list):
             split = [split]
 
-        # assert all([d in _VALID_DOMAIN for d in domain]), "Invalid Domain".format(domain)
-        assert all([s in _VALID_SPLIT for s in split]), "split has to be {}. {} not recognized".format("|".join(_VALID_SPLIT), split)
+        if not all([s in _VALID_SPLIT for s in split]):
+            raise ValueError("split has to be {}. {} not recognized".format("|".join(_VALID_SPLIT), split))
 
         self.root_dir = root_dir
         keytag = []
@@ -104,10 +119,10 @@ class ImageJSONLoader(data.Dataset):
             assert len(id_to_meta) >= len(id_to_im), "Metadata Missing"
 
         ## combine image, annotation and locations
-        self.geodata = []
+        self.data = []
         for imid in id_to_im.keys():
 
-            self.geodata.append((
+            self.data.append((
                 imid,
                 id_to_im[imid]["filename"],
                 id_to_ann[imid]["category"],
@@ -119,10 +134,10 @@ class ImageJSONLoader(data.Dataset):
         self.target_transform = target_transform
         self.loader = loader
 
-        self.target = [g[2] for g in self.geodata]
+        self.target = [g[2] for g in self.data]
 
     def __getitem__(self, index):
-        imid, impath, target, location, metadata = self.geodata[index]
+        imid, impath, target, location, metadata = self.data[index]
         location.pop("image_id",None)
         metadata.pop("image_id",None)
 
@@ -151,15 +166,5 @@ class ImageJSONLoader(data.Dataset):
 
 
     def __len__(self):
-        return len(self.geodata)
-
-if __name__ == "__main__":
-
-    # places_root = "/newfoundland2/tarun/datasets/Places205/data/vision/torralba/deeplearning/GeoDA/GeoPlaces_dataset/"
-    # places_json = "/home/tarun/GeoDA_Project/metadata/geoPlaces_metadata.json"
-    imnet_root = "/newdata/tarun/datasets/WebVision/GeoILSVRC"
-    imnet_json = "/home/tarun/GeoDA_Project/metadata/geoImnet_metadata.json"
-    dataset = ImageJSONLoader(imnet_root, imnet_json, domain=["asia", "usa"], split=["train", "test"])
-
-    print(len(dataset))
+        return len(self.data)
 

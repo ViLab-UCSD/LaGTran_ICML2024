@@ -4,7 +4,7 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-# Modified from https://github.com/tarun005/LaViLa/blob/main/lavila/data/datasets.py
+# Modified from https://github.com/facebookresearch/LaViLa/blob/main/lavila/data/datasets.py
 
 import json
 import numpy as np
@@ -13,6 +13,8 @@ import random
 
 import decord
 import torch
+
+from typing import List, Dict, Any, Union
 
 
 def datetime2sec(str):
@@ -104,72 +106,48 @@ class VideoDatasetBase(torch.utils.data.Dataset):
     """
     Create video dataloader for classification.
     """
-    def __init__(self, dataset, root, metadata, domain="ego", split="train", use_extra=True):
+    def __init__(self, dataset, root, metadata, domain="ego", split="train"):
         self.dataset = dataset
         self.root = root
         self.domain = domain
         self.split = split
-        use_extra = use_extra and split == "train"
 
-        if self.dataset == "ego_exoDA":
-            if split == "train" or split == "val":
-                ego4d = json.load(open(metadata))["{}_{}".format(self.domain, self.split)]
-                self.samples = []
-                for vid, ann, narration, meta in zip(ego4d["clips"], ego4d["annotations"], ego4d["descriptions"], ego4d["metadata"]):
-                    segment_id = vid["id"]
-                    if segment_id in [1908762465, 128702527, 3023277400]: ## zero-len problematic segments.
-                        continue
-                    assert segment_id == ann["segment_id"] == narration["segment_id"] == meta["segment_id"]
-                    vid_name = vid["video_file_name"]
-                    start_second = meta["start_time"] 
-                    end_second = meta["end_time"]
-                    label = ann["category"]
-                    narration = narration["text_caption"]
-                    self.samples.append((segment_id, vid_name, start_second, end_second, label, narration))
-                if use_extra:
-                    ## use additional clips which do not have text narration associated.
-                    ego4d_extra = json.load(open(metadata))["{}_{}_extra".format(self.domain, self.split)]
-                    for vid, ann, narration, meta in zip(ego4d_extra["clips"], ego4d_extra["annotations"], ego4d_extra["descriptions"], ego4d_extra["metadata"]):
-                        segment_id = vid["id"]
-                        if segment_id in [1908762465, 128702527, 3023277400]: ## zero-len problematic segments.
-                            continue
-                        assert segment_id == ann["segment_id"] == narration["segment_id"] == meta["segment_id"]
-                        vid_name = vid["video_file_name"]
-                        start_second = meta["start_time"] 
-                        end_second = meta["end_time"]
-                        label = ann["category"]
-                        narration = narration["text_caption"]
-                        assert narration == ""
-                        self.samples.append((segment_id, vid_name, start_second, end_second, label, narration))
-            # elif split == "val":
-            #     ego4d = json.load(open(metadata))["{}_{}".format(self.domain, self.split)]
-            #     self.samples = []
-            #     for vid, ann, meta in zip(ego4d["clips"], ego4d["annotations"], ego4d["metadata"]):
-            #         segment_id = vid["id"] 
-            #         if segment_id in [1908762465, 128702527, 3023277400]: ## zero-len problematic segments.
-            #             continue
-            #         assert segment_id == ann["segment_id"] == meta["segment_id"]
-        else:
+        if self.dataset != "ego_exoDA" or split not in ["train", "val"]:
             raise NotImplementedError
+
+        ego4d = json.load(open(metadata))["{}_{}".format(self.domain, self.split)]
+        self.samples = []
+        for vid, ann, narration, meta in zip(ego4d["clips"], ego4d["annotations"], ego4d["descriptions"], ego4d["metadata"]):
+            segment_id = vid["id"]
+            if segment_id in [1908762465, 128702527, 3023277400]: ## zero-len problematic segments.
+                continue
+            # assert segment_id == ann["segment_id"] == narration["segment_id"] == meta["segment_id"]
+            if not (segment_id == ann["segment_id"] == narration["segment_id"] == meta["segment_id"]):
+                print("Mismatch in segment_id: ", segment_id, ann["segment_id"], narration["segment_id"], meta["segment_id"])
+            vid_name = vid["video_file_name"]
+            start_second = meta["start_time"] 
+            end_second = meta["end_time"]
+            label = ann["category"]
+            narration = narration["text_caption"]
+            self.samples.append((segment_id, vid_name, start_second, end_second, label, narration))
+
 
     def get_raw_item(self, i, is_training=True, num_clips=1, clip_length=32):
         """
-        Irrespective of the length of the video, always sample <clip_len> equaly spaced frames.
+        Irrespective of the length of the video, always sample <clip_len> equally spaced frames.
         Dense sampling for shorter videos but sparser sampling for longer videos.
         """
-        if self.dataset == "ego_exoDA":
-            segid, vid, start, end, label, narration = self.samples[i]
-            frames = video_loader(self.root, vid, start,
-                                    end_second=end,
-                                    chunk_len=-1, 
-                                    fps=-1, 
-                                    clip_length=clip_length,
-                                    jitter=is_training)
-            return segid, frames, label, narration
-        else:
-            raise NotImplementedError
+        segid, vid, start, end, label, narration = self.samples[i]
+        frames = video_loader(self.root, vid, start,
+                                end_second=end,
+                                chunk_len=-1, 
+                                fps=-1, 
+                                clip_length=clip_length,
+                                jitter=is_training)
+        return segid, frames, label, narration
 
     def __getitem__(self, i):
+        # override this method in the downstream dataset
         raise NotImplementedError
 
     def __len__(self):
@@ -178,13 +156,19 @@ class VideoDatasetBase(torch.utils.data.Dataset):
 
 class VideoClassyDataset(VideoDatasetBase):
     def __init__(
-        self, dataset, root, metadata, transform=None,
+        self, 
+        dataset, 
+        root: str, 
+        metadata: str, 
+        transform=None,
         label_mapping=None,
-        num_clips=1,
-        clip_length=8, clip_stride=1,
-        domain="ego", split="train",
-        use_extra=True,
-        return_narration=False,
+        num_clips: int=1,
+        clip_length: int=8, 
+        clip_stride: int=1,
+        domain: str="ego", 
+        split: str="train",
+        use_extra: bool=True,
+        return_narration: bool=False,
         **kwargs
     ):
         if split == "test":
@@ -216,28 +200,22 @@ class VideoClassyDataset(VideoDatasetBase):
             ego4d = json.load(open(self.metadata))["categories"]
             self.label_mapping = {c["category_id"]: c["category_name"] for c in ego4d}
 
+        return_obj = (segid, frames, label)
         if self.return_narration:
-            return segid, frames, label, narration
-        else:
-            return segid, frames, label
-
+            return_obj += (narration,)
+        
+        return return_obj
 
 def get_downstream_dataset(transform, args, subset='train', label_mapping=None):
-    if subset == 'train':
-        return VideoClassyDataset(
-            args.dataset, args.root, args.metadata_train, transform,
-            is_training=True, label_mapping=label_mapping,
-            num_clips=args.num_clips,
-            clip_length=args.clip_length, clip_stride=args.clip_stride,
-            sparse_sample=args.sparse_sample,
-        )
-    elif subset == 'val':
-        return VideoClassyDataset(
-            args.dataset, args.root, args.metadata_val, transform,
-            is_training=False, label_mapping=label_mapping,
-            num_clips=args.num_clips,
-            clip_length=args.clip_length, clip_stride=args.clip_stride,
-            sparse_sample=args.sparse_sample,
-        )
-    else:
-        assert ValueError("subset should be either 'train' or 'val'")
+    return VideoClassyDataset(
+        args.dataset,
+        args.root,
+        args.metadata_train if subset == 'train' else args.metadata_val,
+        transform,
+        is_training=(subset == 'train'),
+        label_mapping=label_mapping,
+        num_clips=args.num_clips,
+        clip_length=args.clip_length,
+        clip_stride=args.clip_stride,
+        sparse_sample=args.sparse_sample,
+    )

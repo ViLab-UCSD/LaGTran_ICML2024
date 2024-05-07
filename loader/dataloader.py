@@ -65,23 +65,3 @@ class ImageDataLoader(BaseLoader):
         dataset.root_dir = dataset.root
 
         return dataset
-
-
-# unit-test
-if __name__ == '__main__':
-    import pdb
-    cfg = {
-        'data_root': '/newfoundland/tarun/datasets/Adaptation/visDA/',
-        'train': 'data/visDA_full/clipart_train.txt',
-        'val': 'data/visDA_full/real_train.txt',
-        'n_workers': 4,
-        'sampler': {'name': 'random'}
-    }
-    splits = ['train', 'val']
-    data_loader = FileDataLoader(cfg, splits, batch_size=4)
-    import pdb; pdb.set_trace()
-    for (step, value) in enumerate(data_loader['train']):
-        img, label = value
-        pdb.set_trace()
-
-

@@ -1,9 +1,8 @@
 import os
 import torch.utils.data as data
-from PIL import Image
 import json
 import torch
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Union
 
 _VALID_DOMAIN = ["ego", "exo"]
 _VALID_SPLIT = ["train", "test", "val"]
@@ -37,24 +36,40 @@ def default_meta(segid):
 
 class Ego4dLoader(data.Dataset):
 
-    def __init__(self, root_dir, json_path, domain, split="train", transform=None, target_transform=None,
-                 loader=default_loader, return_ann=True, return_meta=False, return_text=False, 
-                 _meta_keys=None, _text_keys=None):
+    def __init__(
+            self,
+            root_dir: str,
+            json_path: str,
+            domain: Union[str, List[str]],
+            split: str = "train",
+            transform=None,
+            target_transform=None,
+            loader=default_loader,
+            return_ann: bool=True,
+            return_meta: bool=False,
+            return_text: bool=False,
+            _meta_keys: List[str]=None,
+            _text_keys: List[str]=None
+    ):
         
         if split == "test":
             split = "val"
 
         if _text_keys is not None:
-            assert isinstance(_text_keys, list), "text keys has to be a list."
-            assert return_text
+            if not isinstance(_text_keys, list):
+                raise ValueError("text keys has to be a list.")
+            if not return_text:
+                raise ValueError("return_text has to be True to use text keys.")
             _text_keys += list(default_text(0).keys())
         else:
             _text_keys = list(default_text(0).keys())
         _text_keys = list(set(_text_keys))
         
         if _meta_keys is not None:
-            assert isinstance(_meta_keys, list), "meta keys has to be a list."
-            assert return_meta
+            if not isinstance(_meta_keys, list):
+                raise ValueError("meta keys has to be a list.")
+            if not return_meta:
+                raise ValueError("return_meta has to be True to use meta keys.")
             _meta_keys += list(default_meta(0).keys())
         else:
             _meta_keys = list(default_meta(0).keys())
@@ -65,8 +80,10 @@ class Ego4dLoader(data.Dataset):
         if not isinstance(split, list):
             split = [split]
 
-        # assert all([d in _VALID_DOMAIN for d in domain]), "Invalid Domain".format(domain)
-        assert all([s in _VALID_SPLIT for s in split]), "split has to be {}. {} not recognized".format("|".join(_VALID_SPLIT), split)
+        if not all([d in _VALID_DOMAIN for d in domain]):
+            raise ValueError("Invalid Domain(s) {}".format(domain))
+        if not all([s in _VALID_SPLIT for s in split]):
+            raise ValueError("split has to be {}. {} not recognized".format("|".join(_VALID_SPLIT), split))
 
         self.root_dir = root_dir
         keytag = []
@@ -116,6 +133,9 @@ class Ego4dLoader(data.Dataset):
                 {k:id_to_text[segid].get(k,"NULL") for k in _text_keys},
                 {k:id_to_meta[segid].get(k, "NULL") for k in _meta_keys}
             ))
+
+        ## compute the mean of all the frame-features as the segment feature.
+        ## TODO: explore better ways of combining these using attention.
         transform = lambda p:torch.mean(p, dim=0).squeeze()
 
         self.transform = transform

@@ -1,8 +1,3 @@
-### sampler.py
-# Functions to setup data sampler.
-# Author: Gina Wu @ 01/22
-###
-
 import numpy as np
 from collections import Counter
 import torch
@@ -44,6 +39,7 @@ class BalancedSampler(Sampler):
 
         self.indices = list(range(len(dataset))) if indices is None else indices
         
+        ## Handle dataset subsets
         try:
             class_ids = np.asarray(dataset.target)[self.indices]
         except:

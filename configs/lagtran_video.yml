@@ -1,0 +1,49 @@
+seed: 1
+model:
+    feature_extractor:
+        arch: timesformerb_8f
+        pretrained: true
+    classifier:
+        arch: mlpcls
+        nonlinear: relu
+        feat_size: [768, 256]
+        n_class: 31 
+data:
+    source:
+        loader: VideoLoader
+        data_root: /data/
+        n_workers: 4
+        drop_last: true
+        return_narration: false
+    target:
+        loader: VideoLoader
+        data_root: /data/
+        n_workers: 4
+        drop_last: true
+        return_narration: false
+training:
+    trainer: lagtran
+    losses:
+        loss_cls:
+            name: cross_entropy
+    iteration: 10004
+    batch_size: 12
+    val_interval: 1000
+    save_interval: 1000
+    print_interval: 500
+    optimizer:
+        name: sgd
+        momentum: 0.9
+        weight_decay: 0.0005
+        nesterov: true
+    scheduler:
+        init_lr: 0.003
+        name: inv
+        gamma: 0.001
+        power: 0.75
+    freeze_encoder: true
+    resume:
+        model: 
+        load_cls: false
+        param_only: true
+exp: LagTran_video

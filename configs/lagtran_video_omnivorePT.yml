@@ -1,0 +1,53 @@
+seed: 1
+model:
+    feature_extractor:
+        arch: resnet50
+        pretrained: true
+    classifier:
+        arch: mlpcls
+        nonlinear: relu
+        feat_size: [1536, 256] # Omnivore Model
+        n_class: 24 
+data:
+    source:
+        loader: Ego4dLoader
+        data_root: /data/
+        n_workers: 4
+        drop_last: true
+        ann: true
+        text: false
+        meta: false
+    target:
+        loader: Ego4dLoader
+        data_root: /data/
+        n_workers: 4
+        drop_last: true
+        ann: true
+        text: false
+        meta: false
+training:
+    trainer: feat_lagtran
+    losses:
+        loss_cls:
+            name: cross_entropy
+    iteration: 100004
+    batch_size: 64
+    val_interval: 5000
+    save_interval: 10000
+    print_interval: 2500
+    optimizer:
+        name: sgd
+        momentum: 0.9
+        weight_decay: 0.0005
+        nesterov: true
+    scheduler:
+        init_lr: 0.003
+        name: inv
+        gamma: 0.001
+        power: 0.75
+    freeze_encoder: true
+    resume:
+        model: 
+        load_cls: false
+        param_only: true
+exp: LagTran_video_omnivorePT

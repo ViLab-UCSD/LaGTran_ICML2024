@@ -1,7 +1,5 @@
-datasets
-*.json
 tensorboard_logs/
-soft_labels/
+*.json
 *.pyth
 *.png
 saved_models
@@ -9,7 +7,6 @@ runs
 *.log
 *__pycache__*
 jobs
-ILSVRC_train.txt
 *.tar
 *.tar.gz
 *.zip
@@ -25,3 +22,4 @@ experiment_*
 inspect*
 runs_*
 metadata/
+bert*

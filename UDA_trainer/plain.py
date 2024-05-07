@@ -1,7 +1,7 @@
 import torch
 
 def train_plain(batch_iterator, model_fe, model_cls, opt, it, criterion_cls,
-            cfg, logger, writer):
+            cfg, logger, writer, **kwargs):
 
     # setting training mode
     if cfg["training"]["freeze_encoder"]:

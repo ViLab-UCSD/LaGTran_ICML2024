@@ -159,7 +159,7 @@ class ImageJSONLoader(data.Dataset):
             return_obj.append(location)
         
         if self.return_meta:
-            metadata["combined"] = " ".join([metadata["caption"], metadata["tags"].replace(","," "), metadata["description"]])
+            metadata["combined_captions"] = " ".join([metadata["caption"], metadata["tags"].replace(","," "), metadata["description"]])
             return_obj.append(metadata)
 
         return tuple(return_obj)

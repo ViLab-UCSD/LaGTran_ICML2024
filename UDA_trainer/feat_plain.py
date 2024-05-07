@@ -1,6 +1,6 @@
 import torch
 
-def train_plain_feat(batch_iterator, model_fe, model_cls, opt, it, criterion_cls,
+def train_plain_feat(batch_iterator, _, model_cls, opt, it, criterion_cls,
             cfg, logger, writer):
 
     # setting training mode
@@ -24,9 +24,7 @@ def train_plain_feat(batch_iterator, model_fe, model_cls, opt, it, criterion_cls
         loss += torch.mean(criterion_cls(output_tgt, lbl_tgt).squeeze())
 
     if loss.item() > 1e5 or torch.isnan(loss):
-        logger.info('Loss explosion: {}'.format(loss.item()))
-        import pdb; pdb.set_trace()
-        return
+        raise ValueError('Loss explosion: {}'.format(loss.item()))
 
     # back propagation
     loss.backward()

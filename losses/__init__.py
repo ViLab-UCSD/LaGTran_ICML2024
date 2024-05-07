@@ -1,15 +1,8 @@
-### __init__.py
-# Get loss functions with designated parameters.
-# Author: Tarun Kalluri @ 07/22
-###
-
 import copy
 import torch.nn as nn
 import logging
 
-from .loss import AFNLoss, CDANLoss, HDALoss, MCCLoss, \
-      EntropyLoss, CrossEntropyLoss, MemSACLoss, MDDLoss, \
-      NuclearWassersteinDiscrepancy, KLDivLoss
+from .loss import CrossEntropyLoss
 
 logger = logging.getLogger('mylogger')
 
@@ -36,16 +29,6 @@ def _get_loss_instance(name):
             'cross_entropy': CrossEntropyLoss,
             'bce_with_logits': nn.BCEWithLogitsLoss,
             'bce': nn.BCELoss,
-            'cdan': CDANLoss,
-            'dann': CDANLoss,
-            'EntropyLoss': EntropyLoss,
-            "KLDivLoss": KLDivLoss,
-            'AFNLoss': AFNLoss,
-            'MCCLoss': MCCLoss,
-            'MemSACLoss': MemSACLoss,
-            'MDDLoss' : MDDLoss,
-            'HDALoss' : HDALoss,
-            'NWDLoss' : NuclearWassersteinDiscrepancy
         }[name]
     except:
         raise BaseException('Loss function {} not available'.format(name))

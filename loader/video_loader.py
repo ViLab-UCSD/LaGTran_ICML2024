@@ -167,13 +167,12 @@ class VideoClassyDataset(VideoDatasetBase):
         clip_stride: int=1,
         domain: str="ego", 
         split: str="train",
-        use_extra: bool=True,
         return_narration: bool=False,
         **kwargs
     ):
         if split == "test":
             split = "val"
-        super().__init__(dataset, root, metadata, domain, split, use_extra)
+        super().__init__(dataset, root, metadata, domain, split)
 
         self.transform = transform
         self.is_training = split == 'train' 

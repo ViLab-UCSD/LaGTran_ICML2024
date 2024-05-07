@@ -1,13 +1,3 @@
-### train_ldam_cdan.py
-# Script for generic adaptation framework.
-# Ref: https://github.com/kaidic/LDAM-DRW
-# Ref: https://github.com/thuml/CDAN/blob/master/pytorch
-# Author: Gina Wu @ 02/22
-###
-
-from email.policy import default
-from tabnanny import check
-import time
 import argparse
 import os
 import yaml
@@ -270,10 +260,7 @@ def main():
 
 if __name__ == '__main__':
     global cfg, args, writer, logger, logdir
-    # valid_trainers = ["plain", "dann", "cdan", "memsac", "sentry", "safn", "bsp"]
-    valid_trainers = ["plain", "dann", "cdan", "safn", "mcc", "memsac", "mdd", "mcd", "toalign", "hda", "adamatch", "daln", "wsda", "feat_plain", "feat_wsda", 'llr', 'feat_llr']
-    pt_dataset = ["imnet", "places", "inat", "imnetpre", "none"]
-    pt_model = ["mae","simclr","moco","swav","sup","none","clip","siglip"]
+    valid_trainers = ["plain", "wsda", "feat_plain", "feat_wsda"]
     backbone_choices = ["resnet50", "vits16", "vitb16", "vitl16", "timm_convnext", "swinb16", "timesformerb_8f", "deitb16"]
     backbone_choices += ["dinov2_vits", "dinov2_vitb"]
 
@@ -300,8 +287,6 @@ if __name__ == '__main__':
     parser.add_argument("--batch_size", type=int, default=64, help="Batch size")
     parser.add_argument("--resume", help="Resume training from checkpoint")
     parser.add_argument("--exp_name", help="experiment name")
-    parser.add_argument("--pt_model", help="pretrained model name", choices=pt_model)
-    parser.add_argument("--pt_dataset", help="pretrained dataset name", choices=pt_dataset)
     parser.add_argument("--backbone", help="backbone network", choices=backbone_choices, default="resnet50")
     parser.add_argument("--linear", help="Linear Probing of SSL Models", type=int, default=0)
     parser.add_argument("--val_freq", help="Validation Frequency", type=int, default=5000)

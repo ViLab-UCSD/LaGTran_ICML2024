@@ -33,18 +33,10 @@ def train_plain(batch_iterator, model_fe, model_cls, opt, it, criterion_cls,
             output_tgt = model_cls(model_fe(img_tgt), feat=False)
 
     loss = torch.mean(criterion_cls(output_src, lbl_src).squeeze())
-    loss.backward()
     if cfg["training"]["use_target"]: 
-        loss = torch.mean(criterion_cls(output_tgt, lbl_tgt).squeeze())
-        loss.backward()
+        loss += torch.mean(criterion_cls(output_tgt, lbl_tgt).squeeze())
 
-    # if loss.item() > 1e5 or torch.isnan(loss):
-    #     logger.info('Loss explosion: {}'.format(loss.item()))
-    #     import pdb; pdb.set_trace()
-    #     return
-
-    # back propagation
-    # loss.backward()
+    loss.backward()
     opt.step()
 
     curr_lr = opt.param_groups[0]['lr']

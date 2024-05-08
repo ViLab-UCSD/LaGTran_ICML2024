@@ -1,5 +1,4 @@
 tensorboard_logs/
-*.json
 *.pyth
 *.png
 saved_models

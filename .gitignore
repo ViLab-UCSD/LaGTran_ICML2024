@@ -1,4 +1,5 @@
 tensorboard_logs/
+llm_adapted_captions/
 *.pyth
 *.png
 saved_models

@@ -1,9 +1,4 @@
-### metrics.py
-# Evaluation metrics.
-###
-
 import numpy as np
-
 
 def percls_accuracy(all_pred, all_label, num_class=0):
     """Computes per class accuracy"""
@@ -18,7 +13,6 @@ def percls_accuracy(all_pred, all_label, num_class=0):
             cls_acc[i] = (all_pred[idx] == all_label[idx]).mean() * 100.0
 
     return cls_acc
-
 
 def bin_accuracy(output, target):
     """Computes the binary classification accuracy"""
@@ -39,7 +33,6 @@ def accuracy(output, target, topk=(1,)):
     res = []
 
     for k in topk:
-        #correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
         correct_k = correct[:k].float().sum()
         res.append(correct_k.mul_(100.0 / batch_size).item())
 

@@ -65,23 +65,17 @@ def get_args():
 
     if dataset == "GeoImnet":
         n_class = 600
-        # cap_src = "combined_captions"
     elif dataset == "GeoPlaces":
         n_class = 205
-        # cap_src = "combined_captions"
     elif dataset == "DomainNet":
         n_class = 345
-        # cap_src = "blip2_cap"
     elif dataset == "EgoExoDA":
         n_class = 24
-        # cap_src = "text_caption"
     else:
         raise ValueError("Unknown dataset.")
 
     ## overwrite config parameters
     cfg["model"]["classifier"]["n_class"] = n_class
-    # cfg["data"]["source"]["n_class"] = n_class
-    # cfg["data"]["target"]["n_class"] = n_class
 
     cfg["training"]["val_interval"] = args.val_freq
     if "lagtran" in args.trainer:

@@ -8,7 +8,7 @@ from torch import nn
 from loader import get_dataloader
 from models import get_model
 from optimizers import get_optimizer, get_scheduler
-from UDA_trainer import get_trainer, val
+from trainer import get_trainer, val
 from losses import get_loss
 from utils import cvt2normal_state, loop_iterable, get_pseudo_labels
 from args import get_args

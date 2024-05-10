@@ -1,31 +1,13 @@
-### train_ldam_cdan.py
-# Script to train LDAM with CDAN.
-# Ref: https://github.com/kaidic/LDAM-DRW
-# Ref: https://github.com/thuml/CDAN/blob/master/pytorch
-# Author: Gina Wu @ 02/22
-###
-
-from email.policy import default
-import time
 import argparse
-import os, sys
+import os
 import yaml
-import shutil
-import numpy as np
 import torch
-from torch import inverse, nn
-import torch.nn.functional as F
+from torch import nn
 
 from loader import get_dataloader
 from models import get_model
-from optimizers import get_optimizer, get_scheduler
-from metrics import averageMeter, accuracy, percls_accuracy
-from losses import get_loss
-from utils import get_logger, cvt2normal_state, loop_iterable, calc_coeff
-from UDA_trainer import eval
-
-torch.autograd.set_detect_anomaly(True)
-
+from utils import get_logger, cvt2normal_state
+from trainer import eval
 
 def main():
     if not torch.cuda.is_available():

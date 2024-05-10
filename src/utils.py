@@ -1,44 +1,13 @@
-### utils.py
-# Functions for logging, loading weights, assign learning rates.
-###
-
 import os, sys
 import logging
 import datetime
-import torch
 import numpy as np
-from collections import OrderedDict
-import torch.nn.functional as F
-
-def disable_batchnorm_tracking(model):
-    def fn(module):
-        # if isinstance(module, torch.nn.modules.batchnorm._BatchNorm):
-        #     module.track_running_stats = False
-        
-        if isinstance(module, torch.nn.BatchNorm2d):
-            # import pdb; pdb.set_trace()
-            module.eval()
-            module.weight.requires_grad = False
-            module.bias.requires_grad = False
-
-    model.apply(fn)
-
-
-def enable_batchnorm_tracking(model):
-    def fn(module):
-        if isinstance(module, torch.nn.modules.batchnorm._BatchNorm):
-            module.track_running_stats = True
-
-    model.apply(fn)
-
 
 def get_pseudo_labels(fname):
     pseudo = {}
     with open(fname, "r") as fh:
         for line in fh.readlines():
-            # fid, *pl = line.strip().split(" ")
             fid, pl = line.strip().split(" ")
-            # pl = np.asarray(pl, dtype=np.float32)
             pseudo[str(fid)] = pl
     return pseudo
 

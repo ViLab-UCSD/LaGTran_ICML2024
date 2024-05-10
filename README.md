@@ -5,7 +5,7 @@
 ## [[project page](https://tarun005.github.io/lagtran/)] [[paper](https://arxiv.org/abs/2403.05535)]
 
 <div style="text-align:center;">
-<img src="assets/BannerPic.png" alt="LagTrAn" width="75%"/>
+<img src="assets/BannerPic.gif" alt="LagTrAn" width="75%"/>
 </div>
 
 

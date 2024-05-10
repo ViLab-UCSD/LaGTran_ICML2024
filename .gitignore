@@ -2,7 +2,6 @@ tensorboard_logs/
 llm_adapted_captions/
 filter_json
 *.pyth
-*.png
 saved_models
 runs
 *.log

@@ -5,7 +5,7 @@
 ## [[project page](https://tarun005.github.io/lagtran/)] [[paper](https://arxiv.org/abs/2403.05535)]
 
 <div style="text-align:center;">
-<img src="assets/BannerPic.png" alt="LagTrAn" width="50%"/>
+<img src="assets/BannerPic.png" alt="LagTrAn" width="75%"/>
 </div>
 
 
@@ -13,7 +13,7 @@
 The current standard of unsupervised domain adaptation lacks mechanism for incorporating text guidance. We propose a novel framework called LaGTrAn, which leverages natural language to guide the transfer of discriminative knowledge from labeled source to weakly labeled target domains in image and video classification tasks. Despite its simplicity, LaGTrAn is highly effective on a variety of benchmarks including GeoNet and DomainNet. We also introduce a new benchmark called Ego2Exo to facilitate robustness studies across viewpoint variations in videos, and show LaGTrAn's effeciency in this novel transfer setting. This repository contains the original source code used to train the language and image classifier models in LaGTrAn as well as the trained models. 
 
 <div style="text-align:center;">
-<img src="assets/intro.png" alt="teaser_pic" width="30%"/>
+<img src="assets/intro.png" alt="teaser_pic" width="55%"/>
 </div>
 
 ### Requirements

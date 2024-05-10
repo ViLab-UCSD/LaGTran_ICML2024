@@ -9,11 +9,11 @@
 
 ## Dataset Preparation.
 
-Our Ego2Exo benchmark is curated from the [EgoExo4D](https://ego-exo4d-data.org/) dataset released by Meta. A complete documentation of the dataset preparation including selecting video segments, narrations and label set is available at this colab notebook. To start with this, you first have to download the annotations and keystep labels f
+Our Ego2Exo benchmark is curated from the [EgoExo4D](https://ego-exo4d-data.org/) dataset released by Meta. A complete documentation of the dataset preparation including selecting video segments, narrations and label set is available at this [colab notebook](create_data.ipynb). Note that you have to first download the annotations and keystep labels from the original dataset. 
 
 ## Dataset Download Instructions
 
-The original video segments should be downloaded from the original [EgoExo4D](https://ego-exo4d-data.org/)  website from Meta by following their guidelines. Specifically, you first have to sign a license form to access and download the dataset, which might take upto 48 hours for getting approved. You can download the [cli installer](https://docs.ego-exo4d-data.org/download/) to enable faster downloads. Make sure that the installation works by running `egoexo --help` which should return the documentation guide. 
+The original video segments should be downloaded from the original [EgoExo4D](https://ego-exo4d-data.org/) website from Meta by following their guidelines. You might have to first sign a license form to access and download the dataset, which might take upto 48 hours for getting approved. You can download the [cli installer](https://docs.ego-exo4d-data.org/download/) to enable faster downloads. Make sure that the installation works by running `egoexo --help` which should return the documentation guide. 
 
 In our paper, we only used the pre-extracted [Omnivore features](https://docs.ego-exo4d-data.org/data/features/) for all the video segments as input to the classification network. If you only want to download the pre-extracted features for the takes corresponding to our dataset, use the following command. Make sure to provide the argument `data_dir` or specify where the files should be downloaded.
 ```

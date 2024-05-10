@@ -18,7 +18,7 @@ The current standard of unsupervised domain adaptation lacks mechanism for incor
 
 ### Requirements
 
-You can use the requirements.txt file to create a new environment or install required packages into existing environments. The following are recommended:
+You can use the [requirements.txt](requirements.txt) file to create a new environment or install required packages into existing environments. The following are recommended:
 1. Pytorch>=2.0
 2. torchvision>=0.14.1
 3. timm=0.9.10
@@ -27,15 +27,15 @@ You can use the requirements.txt file to create a new environment or install req
 
 ### Datasets and metadata
 
-You can access the textual captions and metadata used in our work in the following links. You can find them in the following links. Please refer to this page for dataset and metadata for Ego2Exo.  
-1. GeoNet: Metadata Link.
-2. DomainNet: Metadata Link. 
+You can access the textual captions and metadata used in our work in the following links. 
+1. GeoNet: [GeoPlaces](https://drive.google.com/file/d/11CTqLv6fRCRA3I5u9poZmpFt420XquPx/view?usp=sharing) | [GeoImnet](https://drive.google.com/file/d/1pZmWy4HNl9tGwZErZqckO16DLTLwOMmU/view?usp=sharing) | [GeoUniDA](https://drive.google.com/file/d/1S6T63QMNUc-ZSO_p4rfOxw38uPVZTgrH/view?usp=sharing)
+2. DomainNet: [Metadata](https://drive.google.com/file/d/15-7yWWglIT-zAGaeyzxVJj3kwjLTeHsK/view?usp=sharing). 
 
-Download the metadata and places them inside a folder named `metadata`. You can download the original images from the respective webpages: GeoNet and DomainNet. 
+Download the metadata and places them inside a folder named `metadata`. You can download the original images from the respective webpages: [GeoNet](https://tarun005.github.io/GeoNet/) and [DomainNet](http://ai.bu.edu/M3SDA/). 
 
 ### Ego2Exo: A new video adaptation benchmark.
 
-We leverage the recently proposed [Ego-Exo4D](https://docs.ego-exo4d-data.org/) dataset to create a new benchmark called Ego2Exo to study ego-exo transfer in videos. Ego2Exo contains videos from both egocentric and exocentric viewpoints, and is designed to facilitate robustness studies across viewpoint variations in videos. The complete details to download the videos and metadata for Ego2Exo is available here. 
+We leverage the recently proposed [Ego-Exo4D](https://docs.ego-exo4d-data.org/) dataset to create a new benchmark called Ego2Exo to study ego-exo transfer in videos. Ego2Exo contains videos from both egocentric and exocentric viewpoints, and is designed to facilitate robustness studies across viewpoint variations in videos. Please refer to [this page](Ego2Exo/README.md) for dataset and metadata for Ego2Exo benchmark.  
 
 ### Training.
 

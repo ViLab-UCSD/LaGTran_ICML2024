@@ -71,8 +71,8 @@ You can directly download the target-adapted models (along with the training log
 
 |   |  USA -> Asia | Asia -> USA |
 |---|---|---|
-| GeoPlaces | 56.14 [Link] | 57.02 [Link] |
-| GeoImnet | 63.67 [Link] | 64.16 [Link] |
+| GeoPlaces | 56.14 [Link](https://drive.google.com/drive/folders/1QtWuexlXqMskRmPkDt3dUEZmzwR8Oct4?usp=sharing) | 57.02 [Link](https://drive.google.com/drive/folders/1XREOIm4bqMDVJZPspbur635eI7SpTF9K?usp=sharing) |
+| GeoImnet | 63.67 [Link](https://drive.google.com/drive/folders/1ZnnCyHnZnSEuXb8Ygv-IULvUA0QHFpzQ?usp=sharing) | 64.16 [Link](https://drive.google.com/drive/folders/1gOPso_6cosfxPFzpbY1QcKuvFhiWXWN3?usp=sharing) |
 
 #### Testing.
 

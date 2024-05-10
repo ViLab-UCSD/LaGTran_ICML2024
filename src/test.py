@@ -9,17 +9,16 @@ from models import get_model
 from utils import get_logger, cvt2normal_state
 from trainer import eval
 
-def main():
+def main(cfg, logger):
     if not torch.cuda.is_available():
         raise SystemExit('GPU is needed')
 
-    # import pdb; pdb.set_trace()
-    if "timesformer" in cfg['model']['feature_extractor']['arch']:
-        cfg['data']['target']['loader'] = "VideoLoader"
-        # cfg['data']['target']['dataset'] = "ego_exoDA"
+    # if "timesformer" in cfg['model']['feature_extractor']['arch']:
+    #     cfg['data']['target']['loader'] = "VideoLoader"
+    #     # cfg['data']['target']['dataset'] = "ego_exoDA"
     data_loader_tgt = get_dataloader(cfg['data']['target'], ["test"], cfg['testing']['batch_size'])
 
-    n_classes = cfg["data"]["target"]["n_class"]
+    n_classes = cfg["model"]["classifier"]["n_class"]
     write_file = cfg['testing']['write_file']
 
     # setup model (feature extractor + classifier + discriminator)
@@ -52,11 +51,8 @@ def main():
         model_cls = nn.DataParallel(model_cls, device_ids=range(n_gpu))
 
     eval(data_loader_tgt['test'], model_fe, model_cls, n_classes, write_file, cfg, logger)
-    
-
 
 if __name__ == '__main__':
-    global cfg, args, logger
 
     parser = argparse.ArgumentParser(description='config')
     parser.add_argument(
@@ -69,56 +65,58 @@ if __name__ == '__main__':
 
     # parser.add_argument("--source" , help="Source domain")
     parser.add_argument("--target" , help="Target domain")
-    parser.add_argument("--json_file" , help="Path for annotation json file")
+    parser.add_argument("--dataset" , help="Dataset Name")
     parser.add_argument("--norm", type=int, default=0, help="Normalize features [0/1]")
     parser.add_argument("--data_root", type=str, help="Data root")
-    parser.add_argument("--num_class", type=int, help="Number of classes")
     parser.add_argument("--saved_model", help="Resume training from checkpoint")
     parser.add_argument("--write_file", help="write classwise accuracy to a file.")
-    parser.add_argument("--backbone", help="backbone network", default="resnet50")
+    parser.add_argument("--backbone", help="backbone network", default="vitb16")
     args = parser.parse_args()
 
     with open(args.config) as fp:
         cfg = yaml.load(fp, Loader=yaml.SafeLoader)
 
+    dataset = args.dataset
+    if dataset == "GeoImnet":
+        n_class = 600
+    elif dataset == "GeoPlaces":
+        n_class = 205
+    elif dataset == "DomainNet":
+        n_class = 345
+    elif dataset == "Ego2Exo":
+        n_class = 24
+    else:
+        raise ValueError("Unknown dataset.")
+
     ## overwrite config parameters
-    n_class = args.num_class
     cfg["model"]["classifier"]["n_class"] = n_class
     if args.norm:
         cfg["model"]["classifier"]["norm"] = args.norm
-    cfg["data"]["target"]["n_class"] = n_class
+    # cfg["data"]["target"]["n_class"] = n_class
 
-    cfg["data"]["target"]["data_root"] = args.data_root
-    cfg["data"]["target"]["val"] = args.target
+    # cfg["data"]["target"]["val"] = args.target
 
     cfg["data"]["target"]["domain"] = args.target
-    cfg["data"]["target"]["json_file"] = args.json_file
+    cfg["data"]["target"]["json_file"] = "metadata/{}.json".format(dataset.lower())
     cfg["data"]["target"]["data_root"] = args.data_root
 
-    ## for domain net, seperate test set
     cfg["testing"]["resume"]["model"] = args.saved_model
     cfg['testing']['write_file'] = args.write_file
 
-    cfg["model"]["feature_extractor"]["arch"] = args.backbone
+    if args.backbone:
+        cfg["model"]["feature_extractor"]["arch"] = args.backbone
 
-    if args.backbone == "resnet50":
-        cfg["model"]["classifier"]["feat_size"] = [1536,256,256,256]
-    elif args.backbone == "vits16":
-        cfg["model"]["classifier"]["feat_size"] = [384,256]
-    elif args.backbone.startswith(("vitb16", "vitl16","deitb16")):
-        cfg["model"]["classifier"]["feat_size"] = [768,256]
-    elif "timesformer" in args.backbone:
-        cfg["model"]["classifier"]["feat_size"] = [768,256]
-
-    logdir = os.path.join('runs', os.path.basename(args.config)[:-4], cfg['exp'])
+    logdir = "test/"
 
     print('RUNDIR: {}'.format(logdir))
 
-    logger = get_logger(".")
+    logger = get_logger("runs/")
     logger.info('Start logging')
 
     logger.info(args)
 
-    main()
+    cfg['config'] = args.config
+
+    main(cfg, logger)
 
 

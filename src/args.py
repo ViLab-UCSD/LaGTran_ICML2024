@@ -23,9 +23,9 @@ def get_args():
     parser.add_argument("--dataset" , help="Dataset for adaptation")
     parser.add_argument("--lr_rate" , help="Learning Rate", default=0.003, type=float)
     parser.add_argument("--data_root", type=str, help="Data root")
-    parser.add_argument("--cbs_source", type=int, default=1, choices=[0,1], help="Class balancing in source")
+    parser.add_argument("--cbs_source", type=int, default=1, choices=[0,1], help="Class balanced sampling in source")
     parser.add_argument("--trainer", required=True, type=str.lower, help="Adaptation method.")
-    parser.add_argument("--num_iter", type=int, default=100004, help="Total number of iterations")
+    parser.add_argument("--num_iter", type=int, default=65001, help="Total number of iterations")
     parser.add_argument("--batch_size", type=int, default=64, help="Batch size")
     parser.add_argument("--resume", help="Resume training from checkpoint")
     parser.add_argument("--exp_name", help="experiment name")
@@ -69,7 +69,7 @@ def get_args():
         n_class = 205
     elif dataset == "DomainNet":
         n_class = 345
-    elif dataset == "EgoExoDA":
+    elif dataset == "Ego2Exo":
         n_class = 24
     else:
         raise ValueError("Unknown dataset.")

@@ -22,7 +22,10 @@ def eval(data_loader, model_fe, model_cls, n_classes, write_file=None, cfg=None,
 
         # forward
         with torch.no_grad():
-            output = model_cls(model_fe(image), feat=False)
+            if "video" in cfg['config']:
+                output = model_cls(image, feat=False)
+            else:
+                output = model_cls(model_fe(image), feat=False)
 
         # measure accuracy
         prec1, prec5 = accuracy(output, target, topk=(1, 5))

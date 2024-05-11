@@ -1,8 +1,3 @@
-### linearcls.py
-# Module of linear classifier.
-# Author: Gina Wu @ 01/22
-###
-
 import torch
 from torch import nn
 import torch.nn.functional as F

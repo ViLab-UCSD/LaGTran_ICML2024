@@ -32,7 +32,7 @@ Finally, the metadata containing the segments, labels and language descriptions 
 
 To run the text classification module on Ego2Exo, use the following command.
 ```
-python3 bert_classification.py --dataset Ego2Exo --source ego --target exo --root_dir <data_dir>
+python3 text_classification.py --dataset Ego2Exo --source ego --target exo --root_dir <data_dir>
 ```
 
 Next, we train the video classification module using these pseudo-labels using the following command. Note that we use a smaller learning rate and lesser iterations as we only train the classifier and not the encoder network. 

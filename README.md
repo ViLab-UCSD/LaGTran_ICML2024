@@ -45,12 +45,12 @@ Text Classification on
 
 1. GeoNet: 
 ```
-python3 bert_classification.py --dataset [GeoPlaces|GeoImnet] --source usa --target asia --root_dir <data_dir>
+python3 text_classification.py --dataset [GeoPlaces|GeoImnet] --source usa --target asia --root_dir <data_dir>
 ```
 
 2. DomainNet:
 ```
-python3 bert_classification.py --dataset DomainNet --source real --target clipart --root_dir <data_dir>
+python3 text_classification.py --dataset DomainNet --source real --target clipart --root_dir <data_dir>
 ```
 
 The trained BERT checkpoints along with the pseudo-labels should be download into `bert_checkpoints` and `pseudo_labels` respectively. The pseudo labels can then be used to train the downstream adaptation network as follows. 

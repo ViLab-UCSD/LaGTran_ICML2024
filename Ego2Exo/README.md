@@ -37,7 +37,7 @@ python3 text_classification.py --dataset Ego2Exo --source ego --target exo --roo
 
 Next, we train the video classification module using these pseudo-labels using the following command. Note that we use a smaller learning rate and lesser iterations as we only train the classifier and not the encoder network. 
 ```
-python3 train.py --config configs/lagtran_video_omnivorePT.yml --source exo --target ego --dataset EgoExoDA --data_root <data_dir> --num_iter 45001 --exp_name Ego2Exo_src_exo_tgt_ego --trainer feat_lagtran --batch 64 --val_freq 500
+python3 train.py --config configs/lagtran_video_omnivorePT.yml --source exo --target ego --dataset Ego2Exo --data_root <data_dir> --num_iter 45001 --exp_name Ego2Exo_src_exo_tgt_ego --trainer feat_lagtran --batch 64 --val_freq 500
 ```
 
 ### Citation

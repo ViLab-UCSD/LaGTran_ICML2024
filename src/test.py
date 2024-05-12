@@ -13,9 +13,6 @@ def main(cfg, logger):
     if not torch.cuda.is_available():
         raise SystemExit('GPU is needed')
 
-    # if "timesformer" in cfg['model']['feature_extractor']['arch']:
-    #     cfg['data']['target']['loader'] = "VideoLoader"
-    #     # cfg['data']['target']['dataset'] = "ego_exoDA"
     data_loader_tgt = get_dataloader(cfg['data']['target'], ["test"], cfg['testing']['batch_size'])
 
     n_classes = cfg["model"]["classifier"]["n_class"]
@@ -63,7 +60,6 @@ if __name__ == '__main__':
         help='Configuration file to use',
     )
 
-    # parser.add_argument("--source" , help="Source domain")
     parser.add_argument("--target" , help="Target domain")
     parser.add_argument("--dataset" , help="Dataset Name")
     parser.add_argument("--norm", type=int, default=0, help="Normalize features [0/1]")
@@ -92,9 +88,6 @@ if __name__ == '__main__':
     cfg["model"]["classifier"]["n_class"] = n_class
     if args.norm:
         cfg["model"]["classifier"]["norm"] = args.norm
-    # cfg["data"]["target"]["n_class"] = n_class
-
-    # cfg["data"]["target"]["val"] = args.target
 
     cfg["data"]["target"]["domain"] = args.target
     cfg["data"]["target"]["json_file"] = "metadata/{}.json".format(dataset.lower())
@@ -110,7 +103,7 @@ if __name__ == '__main__':
 
     print('RUNDIR: {}'.format(logdir))
 
-    logger = get_logger("runs/")
+    logger = get_logger("runs/test")
     logger.info('Start logging')
 
     logger.info(args)

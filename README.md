@@ -1,6 +1,6 @@
-
-
 # Tell, Don`t Show!: Language Guidance Eases Transfer Across Domains in Images and Videos (ICML 2024)
+
+Official implementation of the paper [Tell, Don`t Show!: Language Guidance Eases Transfer Across Domains in Images and Videos](https://arxiv.org/abs/2403.05535) published in ICML 2024.
 
 ## <center> [[project page](https://tarun005.github.io/lagtran/)] [[paper](https://arxiv.org/abs/2403.05535)] </center>
 
@@ -94,3 +94,7 @@ If this code or our work helps in your work, please consider citing us.
         url       = {https://arxiv.org/abs/2403.05535},
       },
 ```
+
+### Contact
+
+If you have any question about this project, please contact [Tarun Kalluri](sskallur@ucsd.edu).

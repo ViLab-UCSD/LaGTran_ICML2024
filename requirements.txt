@@ -124,7 +124,6 @@ jupyter-server=2.4.0=pypi_0
 jupyter-server-terminals=0.4.4=pypi_0
 jupyterlab-pygments=0.2.2=pypi_0
 jupyterlab-widgets=3.0.5=pypi_0
-keras=2.15.0=pypi_0
 kiwisolver=1.4.4=pypi_0
 langchain=0.0.314=pypi_0
 langcodes=3.3.0=pypi_0
@@ -338,7 +337,6 @@ wasabi=1.1.2=pypi_0
 wcwidth=0.2.6=pypi_0
 weasel=0.3.4=pypi_0
 webcolors=1.12=pypi_0
-webdataset=0.2.86=pypi_0
 webencodings=0.5.1=pypi_0
 webob=1.8.7=pypi_0
 websocket-client=1.5.1=pypi_0
@@ -346,8 +344,6 @@ werkzeug=3.0.1=pypi_0
 wget=3.2=pypi_0
 wheel=0.38.4=pyhd8ed1ab_0
 widgetsnbextension=4.0.5=pypi_0
-wikidata=0.7.0=pypi_0
-wikipedia-api=0.6.0=pypi_0
 wrapt=1.14.1=pypi_0
 wtforms=3.0.1=pypi_0
 wtforms-recaptcha=0.3.2=pypi_0

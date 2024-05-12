@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 
 def train_lagtran(batch_iterator, model_fe, model_cls, opt, it, criterion_cls,
                     cfg, logger, writer, pseudo):

@@ -1,6 +1,6 @@
 # Ego2Exo: A Video Domain Adaptation Dataset with Natural Language Captions.
 
-## [[Dataset Download](https://drive.google.com/file/d/1pe4F8zYSfA-VYvx296opzHpggrzV-jYE/view?usp=sharing)]
+## [[Dataset Download](https://huggingface.co/datasets/Tarun23/Ego2Exo)]
 
 <div style="display:flex;">
     <img src="../assets/ego_Boil_noodles.gif" width="300" style="margin-right: 10px;" />
@@ -26,7 +26,7 @@ You can also download the complete videos corresponding to our takes. The whole 
 sh takes_download.sh <data_dir>
 ```
 
-Finally, the metadata containing the segments, labels and language descriptions for each action segment can be downloaded from this [link](https://drive.google.com/file/d/1pe4F8zYSfA-VYvx296opzHpggrzV-jYE/view?usp=sharing). 
+Finally, the metadata containing the segments, labels and language descriptions for each action segment can be downloaded from this [link](https://huggingface.co/datasets/Tarun23/Ego2Exo). 
 
 ## LagTraAn on Ego2Exo
 
